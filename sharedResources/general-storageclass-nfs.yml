@@ -1,0 +1,15 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storage-nfs
+provisioner: storage.io/storage-nfs
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  server: 172.22.54.171
+  path: /home/tzahi/nfsshare/storage
+  readOnly: 'false'
+# for home use setup nfs server in wsl2
+# /home/tzahi/nfsshare *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)
+# ln -s /mnt/c/repository/Storage/jenkins /home/tzahi/nfsshare/jenkins

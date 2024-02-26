@@ -1,0 +1,2 @@
+---
+resources: [general-secrets.yml, general-storageclass-nfs.yml]

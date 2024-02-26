@@ -1,0 +1,239 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  # annotations:
+  #   checksum/config:
+  #   checksum/init-fs:
+  #   checksum/init-sysctl:
+  #   checksum/plugins:
+  #   checksum/secret:
+  creationTimestamp: '2024-02-20T14:26:30Z'
+  generateName: my-sonarqube-sonarqube-
+  labels:
+    app: sonarqube
+    apps.kubernetes.io/pod-index: '0'
+    controller-revision-hash: my-sonarqube-sonarqube-59f89dc555
+    release: my-sonarqube
+    statefulset.kubernetes.io/pod-name: my-sonarqube-sonarqube-0
+  name: my-sonarqube-sonarqube-0
+  namespace: default
+  ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: StatefulSet
+      name: my-sonarqube-sonarqube
+      uid: 5c017412-6e89-49d7-b5e0-10f8b9173c99
+  resourceVersion: '333940'
+  uid: 42c8581a-4390-4491-992a-65c0188abf85
+spec:
+  containers:
+    - env:
+        - name: SONAR_HELM_CHART_VERSION
+          value: 10.4.0_2288
+        - name: SONAR_WEB_JAVAOPTS
+        - name: SONAR_WEB_CONTEXT
+          value: /
+        - name: SONAR_CE_JAVAOPTS
+        - name: SONAR_JDBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgresql-password
+              name: my-sonarqube-postgresql
+        - name: SONAR_WEB_SYSTEMPASSCODE
+          valueFrom:
+            secretKeyRef:
+              key: SONAR_WEB_SYSTEMPASSCODE
+              name: my-sonarqube-sonarqube-monitoring-passcode
+      envFrom:
+        - configMapRef:
+            name: my-sonarqube-sonarqube-jdbc-config
+      image: sonarqube:10.4.0-community
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - |
+              host="$(hostname -i || echo '127.0.0.1')"
+              wget --no-proxy --quiet -O /dev/null --timeout=1 --header="X-Sonar-Passcode: $SONAR_WEB_SYSTEMPASSCODE" "http://${host}:9000/api/system/liveness"
+        failureThreshold: 6
+        initialDelaySeconds: 60
+        periodSeconds: 30
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: sonarqube
+      ports:
+        - containerPort: 9000
+          name: http
+          protocol: TCP
+      readinessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - "#!/bin/bash\n# A Sonarqube container is considered ready if the status\
+              \ is UP, DB_MIGRATION_NEEDED or DB_MIGRATION_RUNNING\n# status about\
+              \ migration are added to prevent the node to be kill while sonarqube\
+              \ is upgrading the database.\nhost=\"$(hostname -i || echo '127.0.0.1')\"\
+              \nif wget --no-proxy -qO- http://${host}:9000/api/system/status | grep\
+              \ -q -e '\"status\":\"UP\"' -e '\"status\":\"DB_MIGRATION_NEEDED\"'\
+              \ -e '\"status\":\"DB_MIGRATION_RUNNING\"'; then\n\texit 0\nfi\nexit\
+              \ 1\n"
+        failureThreshold: 6
+        initialDelaySeconds: 60
+        periodSeconds: 30
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          cpu: 800m
+          memory: 2Gi
+        requests:
+          cpu: 400m
+          memory: 1Gi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ALL]
+        runAsGroup: 0
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      startupProbe:
+        failureThreshold: 24
+        httpGet:
+          path: /api/system/status
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+        - mountPath: /opt/sonarqube/data
+          name: sonarqube
+          subPath: data
+        - mountPath: /opt/sonarqube/temp
+          name: sonarqube
+          subPath: temp
+        - mountPath: /opt/sonarqube/logs
+          name: sonarqube
+          subPath: logs
+        - mountPath: /tmp
+          name: tmp-dir
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: kube-api-access-tt4n7
+          readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  hostname: my-sonarqube-sonarqube-0
+  initContainers:
+    - args:
+        - set -o pipefail;for i in {1..200};do (echo > /dev/tcp/my-sonarqube-postgresql/5432)
+          && exit 0; sleep 2;done; exit 1
+      command: [/bin/bash, -c]
+      image: sonarqube:10.4.0-community
+      imagePullPolicy: IfNotPresent
+      name: wait-for-db
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ALL]
+        runAsGroup: 0
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: kube-api-access-tt4n7
+          readOnly: true
+    - command: [/bin/bash, -e, /tmp/scripts/init_sysctl.sh]
+      image: sonarqube:10.4.0-community
+      imagePullPolicy: IfNotPresent
+      name: init-sysctl
+      resources: {}
+      securityContext:
+        privileged: true
+        runAsUser: 0
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+        - mountPath: /tmp/scripts/
+          name: init-sysctl
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: kube-api-access-tt4n7
+          readOnly: true
+  nodeName: docker-desktop
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 0
+  serviceAccount: default
+  serviceAccountName: default
+  subdomain: my-sonarqube-sonarqube
+  terminationGracePeriodSeconds: 30
+  tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+  volumes:
+    - configMap:
+        defaultMode: 420
+        items:
+          - key: init_sysctl.sh
+            path: init_sysctl.sh
+        name: my-sonarqube-sonarqube-init-sysctl
+      name: init-sysctl
+    - configMap:
+        defaultMode: 420
+        items:
+          - key: init_fs.sh
+            path: init_fs.sh
+        name: my-sonarqube-sonarqube-init-fs
+      name: init-fs
+    - configMap:
+        defaultMode: 420
+        items:
+          - key: install_plugins.sh
+            path: install_plugins.sh
+        name: my-sonarqube-sonarqube-install-plugins
+      name: install-plugins
+    - emptyDir: {}
+      name: sonarqube
+    - emptyDir: {}
+      name: tmp-dir
+    - name: kube-api-access-tt4n7
+      projected:
+        defaultMode: 420
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+                - key: ca.crt
+                  path: ca.crt
+              name: kube-root-ca.crt
+          - downwardAPI:
+              items:
+                - fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+                  path: namespace

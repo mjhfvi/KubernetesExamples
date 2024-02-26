@@ -1,0 +1,12 @@
+---
+# Source: https://github.com/argoproj/argo-cd/tree/master/manifests
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: argocd
+resources:
+  - argocd-namespace.yaml
+  - argocd-CustomResourceDefinition.yaml
+# kubectl port-forward svc/argocd-server -n argocd 8085:443
+
+# kubectl kustomize <kustomization_directory>
+# kubectl apply -k <kustomization_directory>

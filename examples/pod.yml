@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-name
+  labels:
+    app: label-name
+    type: label-name
+spec:
+  containers:
+    - name: container-name01
+      image: image-name01
+    - name: container-name02
+      image: image-name02
+#
+# make sure you pull the docker image
+#
+# create the pod with "kubectl create -f file-name"
+#
+# check for new pod with "kubectl get pods"
+#
+# get more information about the pod with "kubectl describe pod pod-name"
+#
+# validate and Verify your YAML documents, http://www.yamllint.com/

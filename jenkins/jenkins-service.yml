@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service-port
+  namespace: jenkins
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: jenkins
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service-jnlp
+  namespace: jenkins
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 50000
+      protocol: TCP
+      targetPort: 50000
+    # nodePort: 50000  #  use with type: NodePort
+  selector:
+    app: jenkins

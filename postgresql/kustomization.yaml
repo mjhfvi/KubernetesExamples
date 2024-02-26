@@ -1,0 +1,14 @@
+---
+resources:
+  - postgres-namespace.yml
+  - postgres-configmap.yml
+  - postgres-service.yml
+  - ../sharedResources/general-storageclass-nfs.yml
+  - postgres-volume-persistent-nfs.yml
+  - postgres-volume-persistent-claim.yml
+# - postgres-statefulset.yml
+# configMapGenerator:
+# - name: kustomization-configmap-nginx
+
+# kubectl kustomize <kustomization_directory>
+# kubectl apply -k <kustomization_directory>

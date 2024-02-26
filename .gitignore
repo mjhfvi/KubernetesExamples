@@ -1,0 +1,4 @@
+.secrets.baseline
+.talismanrc
+findings.json
+gitleaks-report.json

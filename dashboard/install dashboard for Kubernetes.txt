@@ -1,0 +1,22 @@
+# source: https://computingforgeeks.com/how-to-install-kubernetes-dashboard-with-nodeport/
+# source: https://www.yenlo.com/blogs/starting-with-kubernetes-dashboard-ui/
+
+kubectl apply -f C/dashboard/master/aio/deploy/recommended.yaml
+
+wget https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
+mv recommended.yaml kubernetes-dashboard-deployment.yml
+
+# add NodePort to the deployment file,  type: NodePort
+#   selector:
+#  k8s-app: kubernetes-dashboard
+#  type: NodePort
+
+
+kubernetes-dashboard-deployment.yaml
+kubernetes-dashboard-admin.yaml
+kubernetes-dashboard-service.yml
+
+type: LoadBalancer
+kubectl get serviceaccount dashuser -o json -n kubernetes-dashboard
+
+kubectl get secret admin-user-secret -o json -n kubernetes-dashboard

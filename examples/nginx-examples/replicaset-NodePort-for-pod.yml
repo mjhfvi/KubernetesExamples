@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-replicaset
+  labels:
+    app: nginx-replicaset
+    tier: frontend
+spec:
+  replicas: 3  # modify replicas according to your case
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+        - name: nginx-container-replicaset
+          image: nginx
+#
+# update the cluster with "kubectl create -f file-name"
+#
+# check server with "kubectl get replicaset"
+#
+# get node IP address "kubectl get pod -o wide"
+#
+# test website insite the cluster "curl 'pod ip address':'port'"
+#
+# test website outsite the cluster "curl 'master ip address':'nodePort'"
+#
+# update server information, change the yml file and run"kubectl apply -f replicaset-pod.yml"

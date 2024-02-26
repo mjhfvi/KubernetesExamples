@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80  # the pod internal port
+      port: 80  # the kubernetes service port
+      nodePort: 30008  # the node port, external kubernetes access
+  selector:
+    type: front-end
+#
+# update the cluster with "kubectl create -f file-name"
+#
+# check server with "kubectl get services"
+#
+# get node IP address "kubectl get pod -o wide"
+#
+# test website insite the cluster "curl 'pod ip address':'port'"
+#
+# test website outsite the cluster "curl 'master ip address':'nodePort'"
+#
+# update server information, change the yml file and run"kubectl apply -f service-pod.yml"

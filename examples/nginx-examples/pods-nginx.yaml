@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    environment: qa
+    app: nginx
+    used: testing
+  annotations:
+    notes: this is my testing environment for kubernetes
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      env:
+        - name: NGINX_VERSION_NUMBER
+          value: using nginx version 1.25.3
+        - name: NGINX_VERSION
+          valueFrom:
+            secretKeyRef:
+              name: secret-nginx-version
+              key: version

@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-replicaset-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80  # the pod internal port
+      port: 80  # the kubernetes service port
+      nodePort: 30008  # the node port, external kubernetes access
+  selector:
+    app: nginx-replicaset
+    tier: frontend

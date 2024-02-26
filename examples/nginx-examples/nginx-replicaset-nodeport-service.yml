@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-replicaset
+  labels:
+    type: frontend
+spec:
+  replicas: 3  # modify replicas according to your case
+  selector:
+    matchLabels:
+      type: frontend
+  template:
+    metadata:
+      labels:
+        type: frontend
+    spec:
+      containers:
+        - name: nginx-container-replicaset
+          image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-nodeport-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80  # the pod internal port
+      port: 80  # the kubernetes service port
+      nodePort: 30011  # the node port, external kubernetes access
+  selector:
+    type: frontend

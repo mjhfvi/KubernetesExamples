@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: hello-world-replicaset
+  labels:
+    app: hello-world-replicaset
+    type: frontend
+spec:
+  replicas: 3  # modify replicas according to your case
+  selector:
+    matchLabels:
+      type: frontend
+  template:
+    metadata:
+      labels:
+        type: frontend
+    spec:
+      containers:
+        - name: hello-world-container-replicaset
+          image: hello-world
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80  # the pod internal port
+      port: 80  # the kubernetes service port
+      nodePort: 30011  # the node port, external kubernetes access
+  selector:
+    type: frontend

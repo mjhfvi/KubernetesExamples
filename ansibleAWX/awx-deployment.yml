@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: awx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: awx
+  template:
+    metadata:
+      labels:
+        app: awx
+    spec:
+      containers:
+        - name: awx
+          image: ansible/awx
+          ports:
+            - name: http-port
+              containerPort: 80
+          volumeMounts:
+            - name: awx-vol
+              mountPath: /var/lib/awx
+      volumes:
+        - name: awx-vol
+          persistentVolumeClaim:
+            claimName: awx-persistentvolumeclaim-nfs

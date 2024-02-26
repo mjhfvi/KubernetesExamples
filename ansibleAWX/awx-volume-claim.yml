@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: awx-persistentvolumeclaim-nfs
+spec:
+  storageClassName: awx-persistentvolume-nfs
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 10Gi

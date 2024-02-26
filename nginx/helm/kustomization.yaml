@@ -1,0 +1,13 @@
+---
+resources:
+# - helm-template-nginx-deployment.yaml
+# - helm-template-nginx-ingress.yaml
+  - helm-template-nginx-pod.yaml
+# - helm-template-nginx-replicaset.yaml
+  - helm-template-nginx-secret.yaml
+  - helm-template-nginx-service.yaml
+# configMapGenerator:
+# - name: kustomization-configmap-nginx
+
+# kubectl kustomize <kustomization_directory>
+# kubectl apply -k <kustomization_directory>

@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx
+  namespace: nginx
+spec:
+  serviceName: nginx
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          resources:
+            requests:
+              memory: 8Mi
+              cpu: 50m
+            limits:
+              memory: 16Mi
+              cpu: 100m
+        # ports:
+        # - containerPort: 80
+          volumeMounts:
+            - name: nginx-www-mount
+              mountPath: /etc/nginx
+      volumes:
+        - name: nginx-www-mount
+          persistentVolumeClaim:
+            claimName: nginx-persistent-volume-claim-nfs
+# TBD:
+#     volumeMounts:
+#       - name: tmpfs-run
+#         mountPath: /var/run
+#       - name: tmpfs-nginx
+#         mountPath: /var/cache/nginx
+# volumes:
+#   - name: tmpfs-run
+#     emptyDir: {}
+#     persistentVolumeClaim:
+#       claimName: nginx-persistent-volume-claim-nfs
+#   - name: tmpfs-nginx
+#     emptyDir: {}
+#     persistentVolumeClaim:
+#       claimName: nginx-persistent-volume-claim-nfs

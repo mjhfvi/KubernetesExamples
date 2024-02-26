@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+  namespace: jenkins
+  labels:
+    app.kubernetes.io/instance: pod-jenkins
+    app.kubernetes.io/version: 2.443-jdk17
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:2.444-alpine-jdk21
+        # volumeMounts:
+        # - name: jenkins-home-mount
+        #   mountPath: /var/jenkins_home
+      # volumes:
+      # - name: jenkins-home-mount
+      #   hostPath:
+      #     path: /tmp/jenkinsVolume  # directory location on host
+      #     type: DirectoryOrCreate  # this field is optional
+        # persistentVolumeClaim:
+        #   claimName: jenkins-persistent-vol-claim
+        # hostPath:
+        #   path: /home/tzahi/jenkins_home  # directory location on host
+        #   type: DirectoryOrCreate  # this field is optional
+# scale up deployment pods
+# kubectl scale deployments/jenkins-deployment --replicas=6 -n jenkins

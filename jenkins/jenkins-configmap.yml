@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-environment-variables
+  namespace: jenkins
+  labels:
+    app: jenkins
+data:
+  JENKINS_SLAVE_AGENT_PORT: '50000'

@@ -1,0 +1,10 @@
+sudo apt install nfs-kernel-server
+sudo vi /etc/exports
+sudo exports -a
+sudo systemctl status nfs-kernel-server.service
+sudo systemctl restart nfs-kernel-server.service
+
+set SERVER_IP=x.x.x.x
+showmount -e %SERVER_IP%
+telnet %SERVER_IP% 2049
+rpcinfo -p %SERVER_IP%

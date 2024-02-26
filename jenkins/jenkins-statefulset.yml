@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  serviceName: jenkins
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:2.445-alpine-jdk21
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: jenkins-home-mount
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-home-mount
+          persistentVolumeClaim:
+            claimName: jenkins-persistent-volume-claim-nfs
+          # hostPath:
+          # path: /tmp/jenkinsVolume  # directory location on host
+          # type: DirectoryOrCreate  # this field is optional
+# volumeClaimTemplates:
+# - metadata:
+#     name: jenkins-home-mount
+#   spec:
+#     accessModes:
+#     - ReadWriteMany
+#     storageClassName: storage-nfs
+#     resources:
+#       requests:
+#         storage: 10Gi

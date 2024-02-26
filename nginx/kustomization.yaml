@@ -1,0 +1,11 @@
+---
+resources:
+  - nginx-namespace.yml
+# - nginx-storageclass-nfs.yml
+  - nginx-volume-persistent-nfs.yml
+  - nginx-volume-persistent-claim.yml
+  - nginx-service.yml
+# - nginx-statefulset.yml
+
+# kubectl kustomize <kustomization_directory>
+# kubectl apply -k <kustomization_directory>

@@ -1,0 +1,84 @@
+---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: jenkins-persistent-volume
+#   labels:
+#     type: local
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   # volumeMode: Filesystem
+#   accessModes:
+#   - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Retain
+#   storageClassName: hostpath
+#   local:
+#     path: /jenkinsVolume
+#   nodeAffinity:
+#     required:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: In
+#           values:
+#           - docker-desktop
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-persistent-volume
+  labels:
+    type: local
+    app: jenkins
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain
+  accessModes: [ReadWriteMany]
+  hostPath:
+    path: /jenkinsVolume
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-volume-claim
+  namespace: jenkins
+  labels:
+    app: jenkins
+spec:
+  storageClassName: manual
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 10Gi
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: jenkins-persistent-volume
+#   namespace: jenkins
+#   labels:
+#     type: local
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 10Gi
+#   accessModes:
+#   - ReadWriteMany
+#   hostPath:
+#     path: "/var/jenkins_home"
+#     type: DirectoryOrCreate
+
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: jenkins-persistent-volume-claim
+#   namespace: jenkins
+# spec:
+#   storageClassName: hostpath  # had issues with specifying the name, move to dynamic name
+#   accessModes:
+#   - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 3Gi
