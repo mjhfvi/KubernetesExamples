@@ -5,10 +5,11 @@ resources:
   - jenkins-namespace.yml
   - jenkins-configmap.yml
   - jenkins-service.yml
-  - ../sharedResources/general-storageclass-nfs.yml
+
   - jenkins-volume-persistent-nfs.yml
   - jenkins-volume-persistent-claim.yml
 # - jenkins-statefulset.yml
 
+# run this on first time ../sharedResources/general-storageclass-nfs.yml
 # kubectl kustomize <kustomization_directory>
 # kubectl apply -k <kustomization_directory>
