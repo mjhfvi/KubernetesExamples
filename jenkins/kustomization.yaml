@@ -1,15 +1,13 @@
----
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - jenkins-namespace.yml
   - jenkins-configmap.yml
   - jenkins-service.yml
-
   - jenkins-volume-persistent-nfs.yml
   - jenkins-volume-persistent-claim.yml
 # - jenkins-statefulset.yml
 
-# run this on first time ../sharedResources/general-storageclass-nfs.yml
+# run this on first time  ../sharedResources/general-storageclass-nfs.yml
 # kubectl kustomize <kustomization_directory>
 # kubectl apply -k <kustomization_directory>
