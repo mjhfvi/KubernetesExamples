@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -17,7 +16,7 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: jenkins/jenkins:2.445-alpine-jdk21
+          image: jenkins/jenkins:2.449-alpine-jdk21
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: jenkins-home-mount
@@ -26,9 +25,9 @@ spec:
         - name: jenkins-home-mount
           persistentVolumeClaim:
             claimName: jenkins-persistent-volume-claim-nfs
-          # hostPath:
-          # path: /tmp/jenkinsVolume  # directory location on host
-          # type: DirectoryOrCreate  # this field is optional
+            # hostPath:
+            # path: /tmp/jenkinsVolume  # directory location on host
+            # type: DirectoryOrCreate  # this field is optional
 # volumeClaimTemplates:
 # - metadata:
 #     name: jenkins-home-mount
