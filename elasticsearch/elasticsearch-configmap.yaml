@@ -1,0 +1,52 @@
+# Source: eck-operator/templates/configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastic-operator
+  namespace: elastic
+  labels:
+    control-plane: elastic-operator
+    app.kubernetes.io/version: "1.5.0"
+data:
+  eck.yaml: |-
+    log-verbosity: 0
+    metrics-port: 0
+    container-registry: docker.elastic.co
+    max-concurrent-reconciles: 3
+    ca-cert-validity: 8760h
+    ca-cert-rotate-before: 24h
+    cert-validity: 8760h
+    cert-rotate-before: 24h
+    set-default-security-context: true
+    kube-client-timeout: 60s
+    elasticsearch-client-timeout: 180s
+    disable-telemetry: false
+    validate-storage-class: true
+    enable-webhook: true
+    webhook-name: elastic-webhook.k8s.elastic.co
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastic-operator-elasticsearch
+  namespace: elastic
+  labels:
+    control-plane: elastic-operator
+    app.kubernetes.io/version: "1.5.0"
+data:
+  elasticsearch.yml: |-
+    cluster.name: od-fts1
+    node.name: "od-fts1a"
+    node.master: true
+    node.data: true
+    index.number_of_shards: 2
+    index.number_of_replicas: 1
+    bootstrap.mlockall: true
+    gateway.recover_after_nodes: 1
+    gateway.recover_after_time: 10m
+    gateway.expected_nodes: 2
+    action.disable_close_all_indices: true
+    action.disable_delete_all_indices: true
+    action.disable_shutdown: true
+    indices.recovery.max_bytes_per_sec: 100mb

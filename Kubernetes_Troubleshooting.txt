@@ -1,16 +1,3 @@
-## install Helm for Kubernetes
-# source: https://helm.sh/docs/intro/install/
-
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-
-#Initialize a Helm Chart Repository
-helm repo add stable https://charts.helm.sh/stable
-
-# list helm charts you can install
-helm search repo stable
-
 # error "The connection to the server localhost:8080 was refused - did you specify the right host or port?"
 export KUBECONFIG=/etc/kubernetes/admin.conf
 kubectl get nodes
@@ -20,20 +7,6 @@ sudo swapon -s
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
 init 6
 # reboot the PC
-
-# make sure the kubectl is running
-sudo systemctl status kubelet
-
-# check status of all the nodes
-kubectl describe nodes
-
-# check status of a node
-kubectl describe node ops02
-
-# remove node: https://stackoverflow.com/questions/35757620/how-to-gracefully-remove-a-node-from-kubernetes
-
-# check why pod in pending
-kubectl describe pods
 
 # kubeadm reissue init token info
 kubeadm token create --print-join-command
@@ -47,44 +20,12 @@ cat /etc/kubernetes/kubelet.conf
 # copy pam file to local folder
 /var/lib/kubelet/pki/   C:\Users\owner\AppData\Roaming\Lens\kubeconfigs\var\lib\kubelet\pki
 
-## install cri-o for kubernetes cluster
-# install cri-o for kubernetes
-export OS=xUbuntu_20.04
-export VERSION=1.18
-echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /" > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
-echo "deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/ /" > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.list
-
-curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | apt-key add -
-curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | apt-key add -
-
-apt update
-apt install -y cri-o cri-o-runc
-
-sudo systemctl daemon-reload
-sudo systemctl start crio
-
-cat <<EOF | sudo tee /etc/crio/crio.conf.d/02-cgroup-manager.conf
-[crio.runtime]
-conmon_cgroup = "pod"
-cgroup_manager = "cgroupfs"
-EOF
-
 # pull images for kubeadm
 kubeadm config images pull
 
 # start kubernetes host cluster
 kubeadm init
 # if 'Found multiple CRI sockets' error then,   kubeadm init --cri-socket /var/run/crio/crio.sock
-
-## install network CNI plugin
-# source: https://docs.projectcalico.org/getting-started/kubernetes/hardway/install-cni-plugin
-
-curl -L -o /opt/cni/bin/calico https://github.com/projectcalico/cni-plugin/releases/download/v3.16.6/calico-amd64
-chmod 755 /opt/cni/bin/calico
-curl -L -o /opt/cni/bin/calico-ipam https://github.com/projectcalico/cni-plugin/releases/download/v3.16.6/calico-ipam-amd64
-chmod 755 /opt/cni/bin/calico-ipam
-
-mkdir -p /etc/cni/net.d/
 
 cp cni.kubeconfig /etc/cni/net.d/calico-kubeconfig
 chmod 600 /etc/cni/net.d/calico-kubeconfig
@@ -106,7 +47,6 @@ kubectl get namespace $NAMESPACE -o json > $NAMESPACE-tempfile.json
 # remove from json '"finalizers": [ "kubernetes"]'
 kubectl replace --raw "/api/v1/namespaces/$NAMESPACE/finalize" -f ./$NAMESPACE-tempfile.json
 kubectl get namespaces
-
 
 kubectl patch statefulset <statefulset_name> --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"<new_image_name>"}]'
 

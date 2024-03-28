@@ -12,4 +12,4 @@ parameters:
   readOnly: 'false'
 # for home use setup nfs server in wsl2
 # /home/tzahi/nfsshare *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)
-# ln -s /mnt/c/repository/Storage/jenkins /home/tzahi/nfsshare/jenkins
+# ln -s /mnt/c/repository/Storage/jenkins /home/tzahi/nfsshare/storage/jenkins_home

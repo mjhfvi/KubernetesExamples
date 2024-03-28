@@ -8,3 +8,15 @@ metadata:
     app: jenkins
 data:
   JENKINS_SLAVE_AGENT_PORT: '50000'
+  JAVA_OPTS: '-Xms256m -Xmx512m -Djenkins.install.runSetupWizard=false -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -Xlog:gc=trace:file=/var/jenkins_home/jenkinslogs.txt:uptimemillis,pid:filecount=5,filesize=1m'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-file
+  namespace: jenkins
+  labels:
+    app: jenkins
+data:
+  TESTING: |
+    [jenkins_management,jenkins_shovel,jenkins_shovel_management].

@@ -4,7 +4,27 @@ sudo exports -a
 sudo systemctl status nfs-kernel-server.service
 sudo systemctl restart nfs-kernel-server.service
 
-set SERVER_IP=x.x.x.x
+# Troubleshooting Windows
+set SERVER_IP=172.22.54.171
 showmount -e %SERVER_IP%
 telnet %SERVER_IP% 2049
 rpcinfo -p %SERVER_IP%
+
+# Troubleshooting Linux
+export SERVER_IP=172.22.54.171
+showmount -e $SERVER_IP
+telnet $SERVER_IP 2049
+rpcinfo -p $SERVER_IP
+
+# Mount Share Linux
+sudo mkdir /mnt/test_share
+sudo mount -t nfs 172.22.54.171:/home/tzahi/nfsshare/storage/jenkins_home /mnt/test_share
+sudo umount /mnt/test_share
+
+# Mount Share Windows
+
+
+
+
+mount -o nolock -o mtype=hard -o timeout=60 172.22.54.171:/home/tzahi/nfsshare/storage/jenkins_home S:
+172.22.54.171:/home/tzahi/nfsshare/storage/jenkins_home

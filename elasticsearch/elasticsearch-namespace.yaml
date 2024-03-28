@@ -1,0 +1,10 @@
+# Source: eck-operator/templates/operator-namespace.yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: elastic
+  labels:
+    name: elastic
+    control-plane: elastic-operator
+    app.kubernetes.io/version: "1.5.0"

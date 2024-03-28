@@ -1,0 +1,32 @@
+# make sure the kubectl is running
+sudo systemctl status kubectl
+
+# check status of all the nodes
+kubectl describe nodes
+
+# check status of a node
+kubectl describe node ops02
+
+kubectl get all --all-namespaces
+kubectl api-resources -o wide
+
+# remove node: https://stackoverflow.com/questions/35757620/how-to-gracefully-remove-a-node-from-kubernetes
+# check why pod in pending
+kubectl describe pods
+
+kubectl patch statefulset <statefulset_name> --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"<new_image_name>"}]'
+
+example:
+kubectl patch statefulset jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"jenkins/jenkins:2.446-alpine-jdk21"}]'
+
+kubectl expose pod elastic-operator-0 --type=LoadBalancer --port=5601 --target-port=9443 --name=kibana-http -n elastic-system
+
+kubectl port-forward service/quickstart-kb-http 5601
+
+kubectl config set-context --current --namespace=default
+kubectl config set-context --current --namespace=elastic
+
+kubectl exec pod/busybox1 -- cat /etc/resolv.conf
+kubectl exec pod/busybox1 -- lookup 8.8.8.8
+
+kubectl scale --replicas=1 statefulset.apps/jenkins -n jenkins
