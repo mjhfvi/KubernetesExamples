@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jira
+  namespace: jira
+spec:
+  serviceName: jira
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jira
+  template:
+    metadata:
+      labels:
+        app: jira
+    spec:
+      containers:
+        - name: jira
+          image: atlassian/jira-software:9.13.1  # 9.8.1. 9.13.1
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: jira-home-mount
+              mountPath: /var/jira_home
+          # env:
+          #   - name: jira-environment-variables
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: jira-environment-variables
+          #         key: JAVA_OPTS
+          envFrom:
+            - configMapRef:
+                name: jira-db-environment-variables
+            - configMapRef:
+                name: jira-environment-variables
+      volumes:
+        - name: jira-home-mount
+          persistentVolumeClaim:
+            claimName: jira-persistent-volume-claim-nfs
+      restartPolicy: Always

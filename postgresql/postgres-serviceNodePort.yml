@@ -1,8 +1,9 @@
+# Source: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-port
+  name: postgres-port-nodeport
   namespace: postgres
 spec:
   type: NodePort

@@ -29,4 +29,4 @@ kubectl config set-context --current --namespace=elastic
 kubectl exec pod/busybox1 -- cat /etc/resolv.conf
 kubectl exec pod/busybox1 -- lookup 8.8.8.8
 
-kubectl scale --replicas=1 statefulset.apps/jenkins -n jenkins
+kubectl scale statefulset.apps/jenkins --replicas=1 -n jenkins
