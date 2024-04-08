@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jira-environment-variables
+  namespace: jira
+  labels:
+    app: jira
+data:
+  JAVA_OPTS: -Xms1024m -Xmx3072m
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jira-db-environment-variables
+  namespace: jira
+  labels:
+    app: jira
+data:
+  TEMP: 'temp'
+  # ATL_JDBC_URL: jdbc:postgresql://10.1.0.78:5432/jira
+  # ATL_JDBC_USER: user
+  # ATL_JDBC_PASSWORD: 1a2b3c4d # pragma: allowlist secret

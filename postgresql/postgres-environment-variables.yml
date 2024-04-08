@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: general-secrets
+type: Opaque
+data:
+  POSTGRES_USER: 'ZGJfdXNlcg=='  # db_user, https://www.base64encode.org/
+  POSTGRES_PASSWORD: 'MWEyYjNjNGQ='  # 1a2b3c4d, https://www.base64encode.org/  # pragma: allowlist secret

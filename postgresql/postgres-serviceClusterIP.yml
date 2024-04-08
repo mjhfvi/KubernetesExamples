@@ -1,0 +1,19 @@
+# Source: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-port-clusterip
+  namespace: postgres
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+  # selector:
+  #   app: postgres
+# status:
+#   loadBalancer:
+#     ingress:
+#       - ip: 192.0.2.127
