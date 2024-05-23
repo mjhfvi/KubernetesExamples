@@ -5,6 +5,7 @@ metadata:
   name: jenkins-persistent-volume-nfs
   labels:
     app: storage-nfs
+    storageclass.storage.k8s.io: storage-nfs
 spec:
   capacity:
     storage: 5Gi

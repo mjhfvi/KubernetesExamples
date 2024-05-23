@@ -4,8 +4,8 @@ resources:
   - jenkins-namespace.yml
   - jenkins-configmap.yml
   - jenkins-service.yml
-  - jenkins-volume-persistent-nfs.yml
-  - jenkins-volume-persistent-claim.yml
+  - jenkins-persistent-volume-nfs.yml
+  - jenkins-persistent-volume-claim.yml
 # - jenkins-statefulset.yml
 
 # run this on first time  ../sharedResources/general-storageclass-nfs.yml
