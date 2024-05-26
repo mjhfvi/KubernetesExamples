@@ -2,10 +2,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jenkins-persistent-volume-nfs
+  name: jenkins-storage-persistent-volume-nfs
   labels:
-    app: storage-nfs
-    storageclass.storage.k8s.io: storage-nfs
+    storageclass.storage.k8s.io: jenkins-storage-persistent-volume-nfs
 spec:
   capacity:
     storage: 5Gi
