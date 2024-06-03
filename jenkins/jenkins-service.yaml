@@ -7,11 +7,11 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 8080
+    - port: 8081
       protocol: TCP
       targetPort: 8080
   selector:
-    app: jenkins
+    app.kubernetes.io/name: jenkins
 ---
 apiVersion: v1
 kind: Service
@@ -26,4 +26,4 @@ spec:
       targetPort: 50000
     # nodePort: 50000  #  use with type: NodePort
   selector:
-    app: jenkins
+    app.kubernetes.io/name: jenkins

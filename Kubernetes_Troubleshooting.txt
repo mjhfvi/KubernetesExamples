@@ -48,6 +48,10 @@ kubectl get namespace $NAMESPACE -o json > $NAMESPACE-tempfile.json
 kubectl replace --raw "/api/v1/namespaces/$NAMESPACE/finalize" -f ./$NAMESPACE-tempfile.json
 kubectl get namespaces
 
+or
+
+NS=`kubectl get ns |grep Terminating | awk 'NR==1 {print $1}'` && kubectl get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -
+
 kubectl patch statefulset <statefulset_name> --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"<new_image_name>"}]'
 
 example:
