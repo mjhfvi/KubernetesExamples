@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      module: busybox
+  template:
+    metadata:
+      labels:
+        module: busybox
+    spec:
+      # volumes:
+      # - name: busybox-pvc
+          # persistentVolumeClaim:
+          #   claimName: busybox-pvc
+      containers:
+        - name: busybox
+          image: busybox:latest
+          command:
+            - "sh"
+            - "-c"
+            - "while true; do sleep 6000; done"
+          # volumeMounts:
+          #   - mountPath: /storage
+          #     name: busybox-pvc
