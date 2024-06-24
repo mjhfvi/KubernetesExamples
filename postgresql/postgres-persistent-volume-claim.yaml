@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-persistent-volume-claim-nfs
-  namespace: postgres
+  namespace: postgresql
   labels:
     app: postgres-persistent-volume-claim-nfs
 spec:
