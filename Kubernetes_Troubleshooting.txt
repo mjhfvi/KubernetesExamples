@@ -36,23 +36,33 @@ chmod 600 /etc/cni/net.d/calico-kubeconfig
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
 sudo dpkg -i minikube_latest_amd64.deb
 
-# delete resources stuck in Terminating #source: https://stackoverflow.com/questions/52369247/namespace-stuck-as-terminating-how-i-removed-it/66118514#66118514
-kubectl patch RESOURCE RESOURCE-NAME -p '{"metadata":{"finalizers":null}}'
 
-or
+
+### Delete Resources Stuck in 'Terminating' Status #source: https://stackoverflow.com/questions/52369247/namespace-stuck-as-terminating-how-i-removed-it/66118514#66118514
+export RESOURCE=namespaces
+export RESOURCENAME=
+
+echo kubectl patch $RESOURCE $RESOURCENAME -p '{"metadata":{"finalizers":null}}'
+
+kubectl patch $RESOURCE $RESOURCENAME -p '{"metadata":{"finalizers":null}}'
+kubectl get namespaces
+
+OR
 
 kubectl get namespaces
-export NAMESPACE=nginx-ingress
+export NAMESPACE=platform
 kubectl get namespace $NAMESPACE -o json > $NAMESPACE-tempfile.json
 # remove from json '"finalizers": [ "kubernetes"]'
 kubectl replace --raw "/api/v1/namespaces/$NAMESPACE/finalize" -f ./$NAMESPACE-tempfile.json
 kubectl get namespaces
 
-or
+OR
 
-NS=`kubectl get ns |grep Terminating | awk 'NR==1 {print $1}'` && kubectl get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -
+NS=`kubectl get ns | grep Terminating | awk 'NR==1 {print $1}'` && kubectl get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -
+echo $NS
 
-kubectl patch statefulset <statefulset_name> --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"<new_image_name>"}]'
+export RESOURCE=namespaces
+kubectl patch $RESOURCE $NS --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"<new_image_name>"}]'
 
 example:
 kubectl patch statefulset jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"jenkins/jenkins:2.446-alpine-jdk21"}]'
