@@ -1,0 +1,7 @@
+[files]
+# skip these files
+#extend-exclude = ["*.nodes","*.torrent","*.sh","*.py","*.proto","*.json","*.conf","*.toml"]
+
+[default.extend-words]
+# don't correct these false positives
+exportfs = "exportfs"

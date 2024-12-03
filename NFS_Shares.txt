@@ -1,30 +1,54 @@
-sudo apt install nfs-kernel-server
+sudo apt install nfs-kernel-server telnet
+
+mkdir -p ~/nfsshare/storage
+sudo cp /etc/exports /etc/exports.backup && sudo cp /etc/nfs.conf /etc/nfs.conf.backup
+
 sudo vi /etc/exports
-sudo exports -a
+sudo vi /etc/nfs.conf
+/home/tzahi/storage *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)
+
+sudo exports -a OR sudo exportfs -a
 sudo systemctl status nfs-kernel-server.service
 sudo systemctl restart nfs-kernel-server.service
+sudo systemctl status nfs-kernel-server.service
+
+# Troubleshooting Linux
+ip a
+export SERVER_IP=172.22.54.171
+showmount -e $SERVER_IP
+sudo exportfs -av
+rpcinfo -p $SERVER_IP
+sudo cat /proc/fs/nfsd/versions
+sudo showmount --exports %SERVER_IP%
+
+telnet $SERVER_IP 2049
+
+# Mount Share Linux
+sudo mkdir /mnt/test_share
+sudo mount -t nfs $SERVER_IP:/home/tzahi/nfsshare/storage/ /mnt/test_share
+sudo umount /mnt/test_share
 
 # Troubleshooting Windows
-set SERVER_IP=172.22.54.171
+ipconfig
+set SERVER_IP=192.168.50.50
 showmount -e %SERVER_IP%
 telnet %SERVER_IP% 2049
 rpcinfo -p %SERVER_IP%
 
-# Troubleshooting Linux
-export SERVER_IP=172.22.54.171
-showmount -e $SERVER_IP
-telnet $SERVER_IP 2049
-rpcinfo -p $SERVER_IP
-
-# Mount Share Linux
-sudo mkdir /mnt/test_share
-sudo mount -t nfs 172.22.54.171:/home/tzahi/nfsshare/storage/jenkins_home /mnt/test_share
-sudo umount /mnt/test_share
-
 # Mount Share Windows
+mount 172.22.54.171:/home/tzahi/nfsshare/storage/ S:
+
+# get nfs version
+sudo mount -t nfs 172.22.54.171:/home/tzahi/storage/ /home/tzahi/test_share
+mount -v | grep /mnt/test_share
+sudo umount /home/tzahi/test_share
+
+# NFS Vertion 4 test
+sudo mount -t nfs -o nfsvers=4.1 172.22.54.171:/home/tzahi/storage/ /home/tzahi/test_share
 
 
+## NFS CSI driver for Kubernetes | Source: https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/docs/install-csi-driver-v4.9.0.md
+# https://kubernetes.io/docs/concepts/storage/storage-classes/#nfs
+curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/v4.9.0/deploy/install-driver.sh | bash -s v4.9.0 --
 
-
-mount -o nolock -o mtype=hard -o timeout=60 172.22.54.171:/home/tzahi/nfsshare/storage/jenkins_home S:
-172.22.54.171:/home/tzahi/nfsshare/storage/jenkins_home
+kubectl -n kube-system get pod -o wide -l app=csi-nfs-controller

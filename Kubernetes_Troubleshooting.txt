@@ -66,3 +66,6 @@ kubectl patch $RESOURCE $NS --type='json' -p='[{"op": "replace", "path": "/spec/
 
 example:
 kubectl patch statefulset jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"jenkins/jenkins:2.446-alpine-jdk21"}]'
+
+
+journalctl -u kubelet
