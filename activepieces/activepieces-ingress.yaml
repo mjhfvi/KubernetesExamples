@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jenkins-ingress
+  name: activepieces-ingress
   annotations:
     nginx.ingress.kubernetes.io/enable-access-log: "true"
     nginx.ingress.kubernetes.io/enable-modsecurity: "true"
@@ -12,14 +12,14 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: "jenkins.localhost"
+    - host: "activepieces.localhost"
       http:
         paths:
           - pathType: Prefix
             path: /
             backend:
               service:
-                name: jenkins
+                name: activepieces
                 port:
                   number: 8080
 # https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
