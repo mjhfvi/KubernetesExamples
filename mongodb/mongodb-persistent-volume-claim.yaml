@@ -2,10 +2,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongodb-persistent-volume-nfs-claim
+  name: mongodb-persistent-volume-claim-nfs
   namespace: databases
   labels:
-    app: mongodb-persistent-volume-nfs-claim
+    storageclass.storage.k8s.io: storage-nfs
+    persistentvolumes.k8s.io: mongodb-persistent-volume-nfs
+    persistentvolumeclaims.k8s.io: mongodb-persistent-volume-claim-nfs
 spec:
   storageClassName: storage-nfs
   accessModes: [ReadWriteMany]

@@ -2,10 +2,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: redis-persistent-volume-nfs-claim
+  name: redis-persistent-volume-claim-nfs
   namespace: databases
   labels:
-    app: redis-persistent-volume-nfs-claim
+    storageclass.storage.k8s.io: storage-nfs
+    persistentvolumes.k8s.io: redis-persistent-volume-nfs
+    persistentvolumeclaims.k8s.io: redis-persistent-volume-claim-nfs
 spec:
   storageClassName: storage-nfs
   accessModes: [ReadWriteMany]

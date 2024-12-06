@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jenkins-persistent-volume
+  name: lancedb-persistent-volume
   labels:
     app.kubernetes.io/namespase: database
     storageclass.storage.k8s.io: storage-nfs
-    persistentvolumes.k8s.io: jenkins-persistent-volume-nfs
-    persistentvolumeclaims.k8s.io: jenkins-persistent-volume-claim-nfs
+    persistentvolumes.k8s.io: lancedb-persistent-volume-nfs
+    persistentvolumeclaims.k8s.io: lancedb-persistent-volume-claim-nfs
 spec:
   capacity:
     storage: 10Gi
@@ -17,6 +17,6 @@ spec:
   # mountOptions:
   #   - nfsvers=4.1
   nfs:
-    path: /home/tzahi/storage/jenkins
+    path: /home/tzahi/storage/lancedb
     server: 172.22.54.171
     readOnly: false

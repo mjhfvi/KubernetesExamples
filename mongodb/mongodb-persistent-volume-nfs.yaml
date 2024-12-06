@@ -2,16 +2,20 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mongodb-persistent-volume-nfs
+  name: mongodb-persistent-volume
   labels:
-    app: storage-nfs
+    app.kubernetes.io/namespase: database
+    storageclass.storage.k8s.io: storage-nfs
+    persistentvolumes.k8s.io: mongodb-persistent-volume-nfs
+    persistentvolumeclaims.k8s.io: mongodb-persistent-volume-claim-nfs
 spec:
   capacity:
     storage: 10Gi
-  volumeMode: Filesystem
   accessModes: [ReadWriteMany]
   persistentVolumeReclaimPolicy: Retain
   storageClassName: storage-nfs
+  # mountOptions:
+  #   - nfsvers=4.1
   nfs:
     path: /home/tzahi/storage/mongodb
     server: 172.22.54.171
