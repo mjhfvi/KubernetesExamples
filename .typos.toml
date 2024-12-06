@@ -5,3 +5,4 @@
 [default.extend-words]
 # don't correct these false positives
 exportfs = "exportfs"
+ocassionally = "occasionally"

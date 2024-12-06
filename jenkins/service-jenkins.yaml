@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: jenkins
+    meta.helm.sh/release-namespace: jenkins
+  creationTimestamp: "2024-12-03T18:19:40Z"
+  labels:
+    app.kubernetes.io/component: jenkins-controller
+    app.kubernetes.io/instance: jenkins
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: jenkins
+    helm.sh/chart: jenkins-5.7.19
+  name: jenkins
+  namespace: jenkins
+  resourceVersion: "222772"
+  uid: 3ade6d57-24bd-4be1-8a1d-8b7c6fb948bc
+spec:
+  clusterIP: 10.104.216.201
+  clusterIPs:
+    - 10.104.216.201
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/component: jenkins-controller
+    app.kubernetes.io/instance: jenkins
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}

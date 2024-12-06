@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  labels:
+    app: busybox
+spec:
+  containers:
+    - image: busybox
+      command:
+        - sleep
+        - "3600"
+      imagePullPolicy: IfNotPresent
+      name: busybox
+      resources:
+        requests:
+          memory: "32Mi"
+          cpu: "50m"
+        limits:
+          memory: "64Mi"
+          cpu: "100m"
+  restartPolicy: Always
+
+# kubectl exec pod/busybox -- cat /etc/resolv.conf

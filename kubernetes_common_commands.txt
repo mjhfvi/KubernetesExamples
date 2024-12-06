@@ -46,3 +46,5 @@ kubectl -n kubernetes-dashboard create token dashboard-user
 
 kubectl delete all --all
 kubectl delete all --all -n {namespace}
+
+kubectl delete CustomResourceDefinition $(kubectl get CustomResourceDefinition -A | grep "splunk.com" | awk '{print $1}')
