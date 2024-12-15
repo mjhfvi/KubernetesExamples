@@ -51,7 +51,7 @@ repos:
       - id: typos
   # - id: typos-docker
         name: typos (Finds and corrects spelling mistakes)
-        args: [-v]
+        # args: [-v]
         exclude: gitleaks-report.json
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.35.1
