@@ -17,5 +17,5 @@ spec:
   #   - nfsvers=4.1
   nfs:
     path: /home/tzahi/storage/activepieces
-    server: 172.22.54.171
+    server: 172.22.54.208
     readOnly: false

@@ -14,7 +14,7 @@ sudo systemctl status nfs-kernel-server.service
 
 # Troubleshooting Linux
 ip a
-export SERVER_IP=172.22.54.171
+export SERVER_IP=172.22.54.208
 showmount -e $SERVER_IP
 sudo exportfs -av
 rpcinfo -p $SERVER_IP
@@ -36,15 +36,15 @@ telnet %SERVER_IP% 2049
 rpcinfo -p %SERVER_IP%
 
 # Mount Share Windows
-mount 172.22.54.171:/home/tzahi/nfsshare/storage/ S:
+mount 172.22.54.208:/home/tzahi/nfsshare/storage/ S:
 
 # get nfs version
-sudo mount -t nfs 172.22.54.171:/home/tzahi/storage/ /home/tzahi/test_share
+sudo mount -t nfs 172.22.54.208:/home/tzahi/storage/ /home/tzahi/test_share
 mount -v | grep /mnt/test_share
 sudo umount /home/tzahi/test_share
 
 # NFS Vertion 4 test
-sudo mount -t nfs -o nfsvers=4.1 172.22.54.171:/home/tzahi/storage/ /home/tzahi/test_share
+sudo mount -t nfs -o nfsvers=4.1 172.22.54.208:/home/tzahi/storage/ /home/tzahi/test_share
 
 
 ## NFS CSI driver for Kubernetes | Source: https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/docs/install-csi-driver-v4.9.0.md
