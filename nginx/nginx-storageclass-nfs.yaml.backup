@@ -6,7 +6,7 @@ provisioner: storage.io/storage-nfs
 allowVolumeExpansion: true
 reclaimPolicy: Retain
 parameters:
-  server: 172.22.54.171
+  server: 172.22.54.208
   path: /home/tzahi/nfsshare/storage
   readOnly: "false"
 

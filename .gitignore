@@ -8,3 +8,4 @@
 findings.json
 gitleaks-report.json
 .scannerwork/*
+Reloader/*
